@@ -11,9 +11,11 @@ python = "^3.12"
 fastapi = "^0.110.2"
 uvicorn = {extras = ["standard"], version = "^0.29.0"}
 pydantic = {extras = ["email"], version = "^2.7.0"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.29"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
+black = "^24.4.0"
 
 [build-system]
 requires = ["poetry-core"]

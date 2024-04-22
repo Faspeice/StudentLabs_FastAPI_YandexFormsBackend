@@ -10,9 +10,6 @@ app.include_router(items_router)
 app.include_router(users_router)
 
 
-
-
-
 @app.get("/")
 def hello_index():
     return {
@@ -26,9 +23,6 @@ def hello(name: str = "World"):
     return {"message": f"Hello {name}!"}
 
 
-
-
-
 @app.get("/calc/add/")
 def add(a: int, b: int):
     return {
@@ -38,7 +32,5 @@ def add(a: int, b: int):
     }
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
