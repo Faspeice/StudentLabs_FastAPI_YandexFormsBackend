@@ -6,15 +6,12 @@ from typing import Annotated
 from items_views import router as items_router
 from users.views import router as users_router
 import uvicorn
-from core.models import Base, db_helper
 from api import router as router_api1
 from core.config import settings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with db_helper.engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     yield
 
 
