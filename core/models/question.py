@@ -7,6 +7,6 @@ if TYPE_CHECKING:
     from .form import Form
 
 
-class User(Base):
-    username: Mapped[str] = mapped_column(String(32), unique=True)
-    forms: Mapped[list["Form"]] = relationship(back_populates="user")
+class Question(Base):
+    text: Mapped[str]
+    form_id: Mapped[int] = relationship(back_populates="form")
