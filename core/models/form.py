@@ -5,11 +5,12 @@ from .base import Base
 
 if TYPE_CHECKING:
     from .user import User
+    from .question import Question
 
 
 class Form(Base):
     __tablename__ = "forms"
-    type: Mapped[str]
     description: Mapped[str]
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="forms")
+    questions: Mapped[list["Question"]] = relationship(back_populates="form")

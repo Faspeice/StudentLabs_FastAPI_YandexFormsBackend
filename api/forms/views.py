@@ -6,7 +6,7 @@ from . import crud
 from .schemas import Form, FormCreate, FormUpdatePartial
 from .dependencies import form_by_id
 
-router = APIRouter(tags=["Formы"])
+router = APIRouter(tags=["Forms"])
 
 
 @router.get("/", response_model=list[Form])

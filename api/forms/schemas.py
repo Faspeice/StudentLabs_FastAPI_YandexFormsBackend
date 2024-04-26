@@ -2,8 +2,8 @@ from pydantic import BaseModel, ConfigDict
 
 
 class FormBase(BaseModel):
-    type: str
     description: str
+    user_id: int
 
 
 class FormCreate(FormBase):
@@ -11,7 +11,7 @@ class FormCreate(FormBase):
 
 
 class FormUpdatePartial(FormCreate):
-    type: str | None = None
+    user_id: int | None = None
     description: str | None = None
 
 

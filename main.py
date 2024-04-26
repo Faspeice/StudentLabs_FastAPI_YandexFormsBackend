@@ -6,7 +6,7 @@ from typing import Annotated
 from items_views import router as items_router
 from users.views import router as users_router
 import uvicorn
-from api import router as router_api1
+from api import routerForm, routerAns
 from core.config import settings
 
 
@@ -16,7 +16,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(router=router_api1, prefix=settings.api_prefix)
+app.include_router(router=routerForm, prefix=settings.api_prefix)
+app.include_router(router=routerAns, prefix=settings.api_prefix)
 app.include_router(items_router)
 app.include_router(users_router)
 
