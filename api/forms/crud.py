@@ -1,6 +1,7 @@
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from core.models import Form
+from core.models import Form, Question
 from sqlalchemy.engine import Result
 from .schemas import FormCreate, FormUpdatePartial
 
@@ -17,11 +18,22 @@ async def get_form(session: AsyncSession, form_id: int) -> Form | None:
 
 
 async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None:
-    form = Form(**form_in.model_dump())
+    form = Form(
+        description=form_in.description,
+        user_id=form_in.user_id,
+    )
     session.add(form)
+    await session.flush()
+    for question_data in form_in.questions:
+        question = Question(
+            text=question_data.text,
+            type=question_data.type,
+            form_id=form.id,
+            number=question_data.number,
+        )
+        session.add(question)
     await session.commit()
-    # await session.refresh(form)
-    return form
+    return jsonable_encoder(form)
 
 
 async def update_form_partial(
