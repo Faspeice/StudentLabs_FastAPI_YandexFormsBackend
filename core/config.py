@@ -1,9 +1,12 @@
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel
+import os
 
 
 class DbSettings(BaseModel):
-    url: str = f"postgresql+asyncpg://postgres:23685585@localhost/postgres"
+    url: str = (
+        f"postgresql+asyncpg://{os.getenv("DATABASE_USER")}:{os.getenv("DATABASE_PASSWORD")}@{os.getenv("DATABASE_HOST")}/{os.getenv("DATABASE_NAME")}"
+    )
     echo: bool = False
 
 
