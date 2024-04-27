@@ -14,8 +14,8 @@ router = APIRouter(tags=["Answer"])
 
 
 @router.post("/submit-form/")
-def submit_form_answers(
+async def submit_form_answers(
     answer_in: FormAnswerSchema,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-    return crud.submit_answer(answer_in=answer_in, session=session)
+    return await crud.submit_answer(answer_in=answer_in, session=session)
