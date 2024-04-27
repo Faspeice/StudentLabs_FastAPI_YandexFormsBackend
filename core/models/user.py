@@ -1,3 +1,4 @@
+from pydantic import EmailStr
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 from sqlalchemy import String
@@ -9,4 +10,5 @@ if TYPE_CHECKING:
 
 class User(Base):
     username: Mapped[str] = mapped_column(String(32), unique=True)
+    email: Mapped["EmailStr"] = mapped_column(String(32), unique=True)
     forms: Mapped[list["Form"]] = relationship(back_populates="user")
