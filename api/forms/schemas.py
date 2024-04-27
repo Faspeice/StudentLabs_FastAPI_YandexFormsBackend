@@ -14,6 +14,11 @@ class Question(CreateQuestion):
     id: int
 
 
+class CreateOption(BaseModel):
+    text: str
+    question_id: int
+
+
 class FormBase(BaseModel):
     description: str
     user_id: int
@@ -21,6 +26,7 @@ class FormBase(BaseModel):
 
 class FormCreate(FormBase):
     questions: List["CreateQuestion"] | None = None
+    options: List["CreateOption"] | None = None
 
 
 class FormUpdatePartial(FormCreate):
