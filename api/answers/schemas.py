@@ -9,12 +9,11 @@ class TextAnswerSchema(BaseModel):
 
 
 class RadioAnswerSchema(BaseModel):
-    question_id: int
-    selected_option_id: int
+    option_id: int
 
 
 class CheckboxAnswerSchema(BaseModel):
-    selected_options_ids: List[int]
+    options: List[int]
 
 
 class FormAnswerSchema(BaseModel):
