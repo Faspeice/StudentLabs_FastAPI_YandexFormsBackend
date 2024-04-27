@@ -19,7 +19,6 @@ class RadioAnswer(Base):
 
 class CheckboxAnswer(Base):
     __tablename__ = "checkboxanswers"
-    question_id: Mapped[int] = mapped_column(ForeignKey("questions.id"))
     options: Mapped[list["Option"]] = relationship(
         secondary=checkbox_answers_association, back_populates="checkbox_answers"
     )
