@@ -21,24 +21,9 @@ app.include_router(users_router)
 
 
 @app.get("/")
-def hello_index():
+def hello():
     return {
-        "message": "Hello index!",
-    }
-
-
-@app.get("/hello/")
-def hello(name: str = "World"):
-    name = name.strip().title()
-    return {"message": f"Hello {name}!"}
-
-
-@app.get("/calc/add/")
-def add(a: int, b: int):
-    return {
-        "a": a,
-        "b": b,
-        "result": a + b,
+        "message": "Hello!",
     }
 
 

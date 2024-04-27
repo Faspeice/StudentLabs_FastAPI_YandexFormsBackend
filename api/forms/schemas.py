@@ -17,11 +17,10 @@ class Question(CreateQuestion):
 class FormBase(BaseModel):
     description: str
     user_id: int
-    questions: List["CreateQuestion"] | None = None
 
 
 class FormCreate(FormBase):
-    pass
+    questions: List["CreateQuestion"] | None = None
 
 
 class FormUpdatePartial(FormCreate):
