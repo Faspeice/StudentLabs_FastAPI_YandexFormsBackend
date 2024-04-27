@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 class TextAnswerSchema(BaseModel):
     question_id: int
-    answer_text: str
+    text: str
 
 
 class RadioAnswerSchema(BaseModel):
