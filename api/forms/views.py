@@ -34,17 +34,6 @@ async def get_forms(forms: list["Form"] = Depends(form_by_user)):
     return forms
 
 
-@router.patch("/{form_id}/")
-async def update_form(
-    form_update: FormUpdatePartial,
-    form: Form = Depends(form_by_id),
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
-    return await crud.update_form_partial(
-        session=session, form=form, form_update=form_update
-    )
-
-
 @router.delete("/{form_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_form(
     form: Form = Depends(form_by_id),

@@ -5,7 +5,7 @@ from sqlalchemy.orm import selectinload
 
 from core.models import Form, Question, Option
 from sqlalchemy.engine import Result
-from .schemas import FormCreate, FormUpdatePartial
+from .schemas import FormCreate, FormUpdatePartial, FullForm
 
 
 async def get_forms_by_user(session: AsyncSession, user_id: int) -> list[Form]:
@@ -70,29 +70,6 @@ async def get_options_by_q_id(session: AsyncSession, question_id: int) -> list[O
     result: Result = await session.execute(stmn)
     options = result.scalars().all()
     return list(options)
-
-
-async def update_form_partial(
-    session: AsyncSession, form: Form, form_update: FormUpdatePartial
-):
-    for question_data in form_update.questions:
-        question = Question(
-            text=question_data.text,
-            type=question_data.type,
-            form_id=form.id,
-            number=question_data.number,
-        )
-        for name, value in question_data.model_dump(exclude_unset=True).items():
-            setattr(question, name, value)
-        for option_data in question.options:
-            option = Option(
-                text=option_data.text,
-                question_id=option_data.question_id,
-            )
-            for name, value in option_data.model_dump(exclude_unset=True).items():
-                setattr(option, name, value)
-    await session.commit()
-    return form
 
 
 async def delete_form(
