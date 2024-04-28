@@ -12,6 +12,8 @@ class Question(Base):
     text: Mapped[str]
     number: Mapped[int]
     type: Mapped[str]
-    form_id: Mapped[int] = mapped_column(ForeignKey("forms.id"))
+    form_id: Mapped[int] = mapped_column(ForeignKey("forms.id", ondelete="CASCADE"))
     form: Mapped["Form"] = relationship(back_populates="questions")
-    options: Mapped[list["Option"]] = relationship(back_populates="question")
+    options: Mapped[list["Option"]] = relationship(
+        cascade="all, delete", back_populates="question"
+    )

@@ -1,5 +1,5 @@
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import Form, Question, Option
 from sqlalchemy.engine import Result
@@ -58,6 +58,13 @@ async def get_questions_by_form_id(
     return list(questions)
 
 
+async def get_options_by_q_id(session: AsyncSession, question_id: int) -> list[Option]:
+    stmn = select(Option).where(Option.question_id == question_id)
+    result: Result = await session.execute(stmn)
+    options = result.scalars().all()
+    return list(options)
+
+
 async def update_form_partial(
     session: AsyncSession, form: Form, form_update: FormUpdatePartial
 ):
@@ -85,5 +92,8 @@ async def delete_form(
     session: AsyncSession,
     form: Form,
 ) -> None:
-    await session.delete(form)
+    await session.execute(delete(Form).where(Form.id == form.id))
     await session.commit()
+
+
+# why noе cascase='delete'?

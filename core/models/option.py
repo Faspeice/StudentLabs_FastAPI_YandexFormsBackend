@@ -12,7 +12,9 @@ if TYPE_CHECKING:
 class Option(Base):
     __tablename__ = "options"
     text: Mapped[str]
-    question_id: Mapped[int] = mapped_column(ForeignKey("questions.id"))
+    question_id: Mapped[int] = mapped_column(
+        ForeignKey("questions.id", ondelete="CASCADE")
+    )
     question: Mapped["Question"] = relationship(back_populates="options")
     checkbox_answers: Mapped[list["CheckboxAnswer"]] = relationship(
         secondary=checkbox_answers_association, back_populates="options"

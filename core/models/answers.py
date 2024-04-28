@@ -9,12 +9,14 @@ if TYPE_CHECKING:
 
 
 class TextAnswer(Base):
-    question_id: Mapped[int] = mapped_column(ForeignKey("questions.id"))
+    question_id: Mapped[int] = mapped_column(
+        ForeignKey("questions.id", ondelete="CASCADE")
+    )
     text: Mapped[str]
 
 
 class RadioAnswer(Base):
-    option_id: Mapped[int] = mapped_column(ForeignKey("options.id"))
+    option_id: Mapped[int] = mapped_column(ForeignKey("options.id", ondelete="CASCADE"))
 
 
 class CheckboxAnswer(Base):
