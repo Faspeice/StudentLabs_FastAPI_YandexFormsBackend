@@ -10,7 +10,7 @@ router = APIRouter(tags=["Forms"])
 
 
 @router.get("/", response_model=list[Form])
-async def get_forms(
+async def get_all_forms(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     return await crud.get_forms(session=session)
@@ -21,16 +21,17 @@ async def create_form(
     form_in: FormCreate,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
+
     return await crud.create_form(session=session, form_in=form_in)
 
 
 @router.get("/{form_id}/", response_model=FullForm)
-async def get_form(form: FullForm = Depends(form_by_id)):
+async def get_form_by_iD(form: FullForm = Depends(form_by_id)):
     return form
 
 
 @router.get("/user/{username}/", response_model=list[Form])
-async def get_forms(forms: list["Form"] = Depends(form_by_user)):
+async def get_forms_by_username(forms: list["Form"] = Depends(form_by_user)):
     return forms
 
 
