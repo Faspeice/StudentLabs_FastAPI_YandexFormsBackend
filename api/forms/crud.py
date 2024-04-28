@@ -6,6 +6,13 @@ from sqlalchemy.engine import Result
 from .schemas import FormCreate, FormUpdatePartial
 
 
+async def get_forms_by_user(session: AsyncSession, user_id: int) -> list[Form]:
+    stmt = select(Form).where(Form.user_id == user_id)
+    result: Result = await session.execute(stmt)
+    forms = result.scalars().all()
+    return list(forms)
+
+
 async def get_forms(session: AsyncSession) -> list[Form]:
     stmt = select(Form, Form.id).order_by(Form.id)
     result: Result = await session.execute(stmt)
@@ -42,11 +49,34 @@ async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None
     return jsonable_encoder(form)
 
 
+async def get_questions_by_form_id(
+    session: AsyncSession, form_id: int
+) -> list[Question]:
+    stmn = select(Question).where(Question.form_id == form_id)
+    result: Result = await session.execute(stmn)
+    questions = result.scalars().all()
+    return list(questions)
+
+
 async def update_form_partial(
     session: AsyncSession, form: Form, form_update: FormUpdatePartial
 ):
-    for name, value in form_update.model_dump(exclude_unset=True).items():
-        setattr(form, name, value)
+    for question_data in form_update.questions:
+        question = Question(
+            text=question_data.text,
+            type=question_data.type,
+            form_id=form.id,
+            number=question_data.number,
+        )
+        for name, value in question_data.model_dump(exclude_unset=True).items():
+            setattr(question, name, value)
+    for option_data in form_update.options:
+        option = Option(
+            text=option_data.text,
+            question_id=option_data.question_id,
+        )
+        for name, value in option_data.model_dump(exclude_unset=True).items():
+            setattr(option, name, value)
     await session.commit()
     return form
 

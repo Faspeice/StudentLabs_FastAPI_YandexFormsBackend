@@ -20,12 +20,5 @@ app.include_router(router=routerAns, prefix=settings.api_prefix)
 app.include_router(users_router)
 
 
-@app.get("/")
-def hello():
-    return {
-        "message": "Hello!",
-    }
-
-
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)

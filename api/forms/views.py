@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import db_helper
 from . import crud
 from .schemas import Form, FormCreate, FormUpdatePartial
-from .dependencies import form_by_id
+from .dependencies import form_by_id, form_by_user
 
 router = APIRouter(tags=["Forms"])
 
@@ -27,6 +27,11 @@ async def create_form(
 @router.get("/{form_id}/", response_model=Form)
 async def get_form(form: Form = Depends(form_by_id)):
     return form
+
+
+@router.get("/user/{user_id}/", response_model=list[Form])
+async def get_form(forms: list["Form"] = Depends(form_by_user)):
+    return forms
 
 
 @router.patch("/{form_id}/")

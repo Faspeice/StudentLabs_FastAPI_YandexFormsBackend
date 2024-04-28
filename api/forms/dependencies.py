@@ -19,3 +19,16 @@ async def form_by_id(
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"Form {form_id} not found",
     )
+
+
+async def form_by_user(
+    user_id: Annotated[int, Path],
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+) -> list["Form"]:
+    forms = await crud.get_forms_by_user(session=session, user_id=user_id)
+    if forms:
+        return list(forms)
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Forms for this User not found",
+    )
