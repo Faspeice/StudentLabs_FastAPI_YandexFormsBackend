@@ -11,4 +11,6 @@ if TYPE_CHECKING:
 class User(Base):
     username: Mapped[str] = mapped_column(String(32), unique=True)
     email: Mapped["EmailStr"] = mapped_column(String(32), unique=True)
-    forms: Mapped[list["Form"]] = relationship(back_populates="user")
+    forms: Mapped[list["Form"]] = relationship(
+        cascade="all, delete", back_populates="user"
+    )
