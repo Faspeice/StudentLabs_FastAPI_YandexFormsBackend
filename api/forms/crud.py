@@ -84,13 +84,13 @@ async def update_form_partial(
         )
         for name, value in question_data.model_dump(exclude_unset=True).items():
             setattr(question, name, value)
-    for option_data in form_update.options:
-        option = Option(
-            text=option_data.text,
-            question_id=option_data.question_id,
-        )
-        for name, value in option_data.model_dump(exclude_unset=True).items():
-            setattr(option, name, value)
+        for option_data in question.options:
+            option = Option(
+                text=option_data.text,
+                question_id=option_data.question_id,
+            )
+            for name, value in option_data.model_dump(exclude_unset=True).items():
+                setattr(option, name, value)
     await session.commit()
     return form
 
