@@ -22,10 +22,10 @@ async def form_by_id(
 
 
 async def form_by_user(
-    user_id: Annotated[int, Path],
+    username: str,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> list["Form"]:
-    forms = await crud.get_forms_by_user(session=session, user_id=user_id)
+    forms = await crud.get_forms_by_user(session=session, username=username)
     if forms:
         return list(forms)
     raise HTTPException(

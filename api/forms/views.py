@@ -29,7 +29,7 @@ async def get_form(form: FullForm = Depends(form_by_id)):
     return form
 
 
-@router.get("/user/{user_id}/", response_model=list[Form])
+@router.get("/user/{username}/", response_model=list[Form])
 async def get_forms(forms: list["Form"] = Depends(form_by_user)):
     return forms
 
