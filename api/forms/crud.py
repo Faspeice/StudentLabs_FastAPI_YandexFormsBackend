@@ -46,12 +46,12 @@ async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None
             number=question_data.number,
         )
         session.add(question)
-    for option_data in form_in.options:
-        option = Option(
-            text=option_data.text,
-            question_id=option_data.question_id,
-        )
-        session.add(option)
+        for option_data in question_data.options:
+            option = Option(
+                text=option_data.text,
+                question_id=option_data.question_id,
+            )
+            session.add(option)
     await session.commit()
     return jsonable_encoder(form)
 

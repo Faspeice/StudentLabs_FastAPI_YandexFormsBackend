@@ -7,12 +7,12 @@ class CreateQuestion(BaseModel):
     text: str
     number: int
     type: str
+    options: List["CreateOption"] | None = None
 
 
 class Question(CreateQuestion):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    options: List["Option"] | None = None
 
 
 class CreateOption(BaseModel):
@@ -30,7 +30,7 @@ class FormBase(BaseModel):
 
 
 class FormCreate(FormBase):
-    questions: List["Question"] | None = None
+    questions: List["CreateQuestion"] | None = None
 
 
 class FullForm(FormCreate):
