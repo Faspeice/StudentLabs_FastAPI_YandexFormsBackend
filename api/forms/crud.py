@@ -1,6 +1,8 @@
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from core.models import Form, Question, Option
 from sqlalchemy.engine import Result
 from .schemas import FormCreate, FormUpdatePartial
@@ -20,8 +22,13 @@ async def get_forms(session: AsyncSession) -> list[Form]:
     return list(forms)
 
 
-async def get_form(session: AsyncSession, form_id: int) -> Form | None:
-    return await session.get(Form, form_id)
+async def get_form(session: AsyncSession, form_id: int):
+    result = await session.execute(
+        select(Form)
+        .options(selectinload(Form.questions).selectinload(Question.options))
+        .where(Form.id == form_id)
+    )
+    return result.scalars().first()
 
 
 async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None:

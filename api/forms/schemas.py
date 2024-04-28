@@ -29,6 +29,10 @@ class FormCreate(FormBase):
     options: List["CreateOption"] | None = None
 
 
+class FullForm(FormCreate):
+    id: int
+
+
 class FormUpdatePartial(FormCreate):
     user_id: int | None = None
     description: str | None = None
