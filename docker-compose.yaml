@@ -1,0 +1,30 @@
+version: '3.12'
+
+services:
+  app:
+    build: .
+    depends_on:
+      - db
+    command: bash -c 'uvicorn main:app --reload --port=8000 --host=0.0.0.0'
+    volumes:
+      - .:/TTSLABFORMS
+    ports:
+      - 8000:8000
+    restart: always
+    env_file:
+      - core/.env
+  db:
+    container_name: my_project_postgres
+    image: postgres
+    env_file:
+      - core/.env
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+
+    ports:
+      - "5432:5432"
+    volumes:
+     - .postgres:/var/lib/postgresql/data
+    restart: always
