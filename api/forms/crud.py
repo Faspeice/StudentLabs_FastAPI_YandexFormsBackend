@@ -47,6 +47,7 @@ async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None
     )
     session.add(form)
     await session.flush()
+    questions = []
     for question_data in form_in.questions:
         question = Question(
             text=question_data.text,
@@ -55,13 +56,17 @@ async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None
             number=question_data.number,
         )
         session.add(question)
-        for option_data in question_data.options:
-            option = Option(
-                text=option_data.text,
-                question_id=option_data.question_id,
-            )
-            session.add(option)
-    await session.commit()
+        questions.append(question)
+    await session.flush()
+    for question, question_data in zip(questions, form_in.questions):
+        if question_data.options:
+            for option_data in question_data.options:
+                option = Option(
+                    text=option_data.text,
+                    question_id=question.id,
+                )
+                session.add(option)
+        await session.commit()
     return jsonable_encoder(form)
 
 

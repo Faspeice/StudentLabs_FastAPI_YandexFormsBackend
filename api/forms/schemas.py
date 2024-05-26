@@ -17,7 +17,6 @@ class Question(CreateQuestion):
 
 class CreateOption(BaseModel):
     text: str
-    question_id: int
 
 
 class Option(CreateOption):
