@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,6 +15,13 @@ from .schemas import (
 async def submit_answer(
     session: AsyncSession, answer_in: FormAnswerSchema
 ) -> FormAnswerSchema | None:
+    form_query = select(Form).where(Form.id == answer_in.form_id)
+    form_result = await session.execute(form_query)
+    form = form_result.scalars().first()
+
+    if not form:
+        raise HTTPException(status_code=404, detail="Form not found")
+
     text_answers = (
         [TextAnswer(**data.dict()) for data in answer_in.text_answers]
         if answer_in.text_answers
