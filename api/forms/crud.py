@@ -12,9 +12,9 @@ from .schemas import FormCreate, FormUpdatePartial, FullForm
 async def get_forms_by_user(session: AsyncSession, username: str) -> list[Form]:
     st = select(User.id).where(User.username == username)
     resultus: Result = await session.execute(st)
-    row = resultus.fetchone()
-    if row:
-        stmt = select(Form).where(Form.user_id == int(row[0]))
+    row = resultus.scalar()
+    if row is not None:
+        stmt = select(Form).where(Form.user_id == row)
         result: Result = await session.execute(stmt)
         forms = result.scalars().all()
         return list(forms)
@@ -41,6 +41,14 @@ async def get_form(session: AsyncSession, form_id: int):
 
 
 async def create_form(session: AsyncSession, form_in: FormCreate) -> Form | None:
+
+    user_query = select(User).where(User.id == form_in.user_id)
+    user_result = await session.execute(user_query)
+    user = user_result.scalars().first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
     form = Form(
         description=form_in.description,
         user_id=form_in.user_id,
